@@ -75,10 +75,6 @@ export function useDependencyScan() {
   return {
     ...scanState,
     isScanning: scanState.status === "loading",
-    scanProgressLabel:
-      scanState.scanProgress.total > 0
-        ? `Checking package metadata ${scanState.scanProgress.completed} of ${scanState.scanProgress.total}`
-        : scanState.scanMessage,
     setSourceType: (value) => dispatch(setSourceType(value)),
     setManifestText: (value) => dispatch(setManifestText(value)),
     setRepoUrl: (value) => dispatch(setRepoUrl(value)),

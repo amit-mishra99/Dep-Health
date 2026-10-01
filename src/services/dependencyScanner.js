@@ -80,25 +80,21 @@ function getMaintenanceStatus(publishDate) {
   return "active";
 }
 
-export function calculateHealthScore(dependencies, severityCounts) {
+export function calculateHealthScore(dependencies, severityCounts, summary) {
   const deductions =
     Math.min(severityCounts.critical * 15, 40) +
     Math.min(severityCounts.high * 8, 25) +
     severityCounts.moderate * 3 +
     severityCounts.low +
-    dependencies.filter(({ deprecated }) => Boolean(deprecated)).length * 5 +
-    dependencies.filter(
-      ({ maintenanceStatus }) => maintenanceStatus === "abandoned",
-    ).length *
-      4 +
+    summary.deprecated * 5 +
+    summary.unmaintained * 4 +
     dependencies.filter(({ updateType }) => updateType === "major").length *
       2 +
     dependencies.filter(({ license }) => /\b(AGPL|GPL)\b/i.test(license))
       .length *
       3;
 
-  const averageDeduction = deductions / dependencies.length;
-  return Math.round(Math.max(0, 100 - averageDeduction) * 10) / 10;
+  return Math.max(0, 100 - deductions);
 }
 
 function getAdvisoryDetail(id) {
@@ -162,7 +158,6 @@ export async function scanManifest(
   manifest,
   sourceName = manifest.name || "package.json",
   resolvedVersions = {},
-  onProgress = () => {},
 ) {
   const declarations = [
     ...Object.entries(manifest.dependencies || {}).map(([name, range]) => ({
@@ -190,8 +185,6 @@ export async function scanManifest(
     );
   }
 
-  onProgress({ completed: 0, total: uniqueDeclarations.length });
-  let completedPackages = 0;
   const packages = await mapWithConcurrency(
     uniqueDeclarations,
     CONCURRENCY,
@@ -239,12 +232,6 @@ export async function scanManifest(
           maintenanceStatus: "unknown",
           lookupError: error.message,
         };
-      } finally {
-        completedPackages += 1;
-        onProgress({
-          completed: completedPackages,
-          total: uniqueDeclarations.length,
-        });
       }
     },
   );
@@ -351,7 +338,6 @@ export async function scanManifest(
       if (severity in severityCounts) severityCounts[severity] += 1;
     });
   });
-
   return {
     id: crypto.randomUUID(),
     name: sourceName,
@@ -359,7 +345,7 @@ export async function scanManifest(
     versionSource: Object.keys(resolvedVersions).length
       ? "package-lock.json"
       : "package.json",
-    score: calculateHealthScore(dependencies, severityCounts),
+    score: calculateHealthScore(dependencies, severityCounts, summary),
     summary,
     severityCounts,
     dependencies,

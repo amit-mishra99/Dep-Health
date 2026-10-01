@@ -33,7 +33,7 @@ function App() {
             repoUrl={scanSession.repoUrl}
             setRepoUrl={scanSession.setRepoUrl}
             isScanning={scanSession.isScanning}
-            scanMessage={scanSession.scanProgressLabel}
+            scanMessage={scanSession.scanMessage}
             error={scanSession.error}
             onErrorDismiss={() => scanSession.setError("")}
             onScan={scanSession.scan}

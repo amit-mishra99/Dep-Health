@@ -29,12 +29,7 @@ export const runDependencyScan = createAsyncThunk(
     }
 
     dispatch(setScanMessage("Checking npm metadata and known advisories"));
-    const report = await scanManifest(
-      manifest,
-      sourceName,
-      resolvedVersions,
-      (scanProgress) => dispatch(setScanProgress(scanProgress)),
-    );
+    const report = await scanManifest(manifest, sourceName, resolvedVersions);
     window.history.replaceState(
       null,
       "",
@@ -51,7 +46,6 @@ const initialState = {
   report: decodeSharedReport(),
   status: "idle",
   scanMessage: "",
-  scanProgress: { completed: 0, total: 0 },
   error: "",
 };
 
@@ -77,9 +71,6 @@ const scanSlice = createSlice({
     setScanMessage(state, action) {
       state.scanMessage = action.payload;
     },
-    setScanProgress(state, action) {
-      state.scanProgress = action.payload;
-    },
     setSharedReport(state, action) {
       state.report = action.payload;
     },
@@ -90,20 +81,17 @@ const scanSlice = createSlice({
         state.status = "loading";
         state.error = "";
         state.scanMessage = "";
-        state.scanProgress = { completed: 0, total: 0 };
       })
       .addCase(runDependencyScan.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.report = action.payload;
         state.scanMessage = "";
-        state.scanProgress = { completed: 0, total: 0 };
       })
       .addCase(runDependencyScan.rejected, (state, action) => {
         state.status = "failed";
         state.error =
           action.error.message || "The scan could not be completed.";
         state.scanMessage = "";
-        state.scanProgress = { completed: 0, total: 0 };
       });
   },
 });
@@ -114,7 +102,6 @@ export const {
   setRepoUrl,
   setError,
   setScanMessage,
-  setScanProgress,
   setSharedReport,
 } = scanSlice.actions;
 

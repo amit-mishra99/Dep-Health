@@ -13,22 +13,21 @@ export default function ScoringMethod() {
       </div>
       <div className="method-content">
         <p>
-          We apply weighted deductions for known risk, age, and avoidable
-          maintenance friction, then average them across the analyzed packages.
-          This keeps project size from overwhelming the score. A clean package
-          does not earn extra points just for being popular.
+          Every report starts at 100. We deduct for known risk and avoidable
+          maintenance friction. A clean package does not earn extra points just
+          for being popular.
         </p>
         <div className="deduction-list">
           <div>
             <span>Critical vulnerability</span>
             <strong>
-              −15 <small>each, max −40 before averaging</small>
+              −15 <small>each, max −40</small>
             </strong>
           </div>
           <div>
             <span>High vulnerability</span>
             <strong>
-              −8 <small>each, max −25 before averaging</small>
+              −8 <small>each, max −25</small>
             </strong>
           </div>
           <div>
