@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root {
+  font-family: 'DM Sans', sans-serif;
+  color: #1c2c26;
+  background: #f3f6f1;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-optical-sizing: auto;
+  font-weight: 400;
+
+  --ink: #1c2c26;
+  --ink-soft: #41534b;
+  --muted: #748179;
+  --paper: #fbfcf9;
+  --canvas: #f3f6f1;
+  --line: #dce4dc;
+  --line-strong: #cbd6cc;
+  --green: #236446;
+  --green-dark: #163f31;
+  --lime: #d4f078;
+  --orange: #c75b3c;
+  --mono: 'DM Mono', monospace;
+  --heading: 'Space Grotesk', sans-serif;
+
+  color-scheme: light;
+  font-synthesis: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background-color: var(--canvas);
+  background-image: linear-gradient(rgba(40, 74, 55, 0.025) 1px, transparent 1px);
+  background-size: 100% 32px;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  color: inherit;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid rgba(35, 100, 70, 0.36);
+  outline-offset: 3px;
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  color: var(--ink);
+  background: var(--lime);
+}
